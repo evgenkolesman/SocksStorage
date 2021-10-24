@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      - POSTGRES_PASSWORD=PassworD1
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=socks
+      - PGDATA=/var/lib/postgresql/data
+    volumes:
+      - ./db/shortcut/data:/var/lib/postgresql/data
+    ports:
+      - 5433:5433
+    restart: always
+  app:
+    image: euhenios/socksstorage
+    container_name: euhenios/socksstorage
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5433/socks
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=PassworD1
+    ports:
+      - 127.0.0.1/80:8080
+    depends_on:
+      - db
